@@ -10,11 +10,14 @@ public class PSXPixelizationVolume : VolumeComponent, IPostProcessComponent
     [Tooltip("Enable the PSX pixelization effect.")]
     public BoolParameter enabled = new BoolParameter(false, overrideState: true);
 
-    [Tooltip("Render scale factor. Lower values = more pixelated. 0.35 gives a classic PSX look.")]
-    public ClampedFloatParameter renderScale = new ClampedFloatParameter(0.35f, 0.05f, 1f);
+    [Tooltip("Target resolution height in pixels. Lower values = more pixelated. 240 gives a classic PSX look.")]
+    public ClampedIntParameter targetHeight = new ClampedIntParameter(240, 120, 1080);
+
+    [Tooltip("Reference resolution height for scale calculation. Default is 1080p.")]
+    public ClampedIntParameter referenceHeight = new ClampedIntParameter(1080, 480, 2160);
 
     [Tooltip("Color depth in bits per channel. Lower = more PSX color banding.")]
     public ClampedIntParameter colorDepth = new ClampedIntParameter(32, 2, 32);
 
-    public bool IsActive() => enabled.value && renderScale.value < 1f;
+    public bool IsActive() => enabled.value && targetHeight.value < referenceHeight.value;
 }

@@ -45,13 +45,17 @@ public class PSXPixelizationPass : ScriptableRenderPass, System.IDisposable
         var source = resourceData.activeColorTexture;
         var descriptor = cameraData.cameraTargetDescriptor;
 
-        float scale = volume.renderScale.value;
+        // Calculate uniform scale based on target height
+        int targetHeight = volume.targetHeight.value;
         int colorDepth = volume.colorDepth.value;
-
+        
+        // Calculate scale to achieve target height regardless of current resolution
+        float scale = (float)targetHeight / descriptor.height;
+        
         // Create a low-res render target
         var downDesc = descriptor;
         downDesc.width = Mathf.Max(1, (int)(descriptor.width * scale));
-        downDesc.height = Mathf.Max(1, (int)(descriptor.height * scale));
+        downDesc.height = Mathf.Max(1, targetHeight);
         downDesc.depthBufferBits = 0;
         downDesc.msaaSamples = 1;
 
